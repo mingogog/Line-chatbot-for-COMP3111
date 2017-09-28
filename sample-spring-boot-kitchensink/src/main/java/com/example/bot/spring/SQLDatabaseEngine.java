@@ -11,9 +11,26 @@ import java.net.URI;
 public class SQLDatabaseEngine extends DatabaseEngine {
 	@Override
 	String search(String text) throws Exception {
-		//Write your code here
-		return null;
+	Connection test = getConnection();
+	PreparedStatement stmt = null;
+	stmt=test.prepareStatement("SELECT response FROM test where keyword like concat('%', ? , '%')");
+    stmt.setString(1,text);
+	ResultSet rs = stmt.executeQuery();
+	String rss = null;
+	
+	if(rs.next()) {
+		rss=rs.getString("response");
+		rs.close();
+		stmt.close();
+		test.close();
+		return rss;
 	}
+
+	throw new Exception();
+
+}	
+	
+
 	
 	
 	private Connection getConnection() throws URISyntaxException, SQLException {
